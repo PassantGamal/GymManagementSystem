@@ -9,9 +9,14 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Repositories.Classes
 {
-    internal class MemberRepository : IMemberRepository
+    public class MemberRepository : IMemberRepository
     {
-        private readonly GymDbContext _dbContext= new GymDbContext();
+        private readonly GymDbContext _dbContext;
+        public MemberRepository(GymDbContext dbContext) 
+        {
+            _dbContext = dbContext;
+        }
+        
         public int Add(Member member)
         {
             _dbContext.Members.Add(member);

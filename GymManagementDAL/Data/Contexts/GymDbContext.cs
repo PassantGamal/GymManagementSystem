@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Data.Contexts
 {
-    internal class GymDbContext : DbContext
+    public class GymDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=.;Database=GymManagementG03;Trusted_Connection=True;TrustServerCertificate=True;");
-        }
+        public GymDbContext(DbContextOptions<GymDbContext> options): base(options) { }
+        
+       
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=.;Database=GymManagementG03;Trusted_Connection=True;TrustServerCertificate=True;");
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
              modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

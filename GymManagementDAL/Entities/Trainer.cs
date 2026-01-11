@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entities
 {
-    internal class Trainer: GymUser
+    public class Trainer: GymUser
     {
         public Specialties Specialty { get; set; }
         //HireDate == CreatedAt from BasaEntity 
