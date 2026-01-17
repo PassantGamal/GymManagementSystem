@@ -20,6 +20,13 @@ namespace GymManagementPL
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));// short hand
             });
             builder.Services.AddScoped<ITrainerRepository, TrainerRepository>();
+            builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+            builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<IPlanRepository,PlanRepository>();
+            builder.Services.AddScoped<ISessionRepository, SessionRepository>();
+            builder.Services.AddScoped<IMemberSessionRepository, IMemberSessionRepository>();
+            builder.Services.AddScoped<IHealthRecordRepository, HealthRecordRepository>();
+            builder.Services.AddScoped<IMemberShipRepository,IMemberShipRepository>();
 
             var app = builder.Build();
 
