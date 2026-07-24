@@ -16,24 +16,10 @@ namespace GymManagementDAL.Repositories.Classes
         {
             _dbContext = dbContext;
         }
-        public int Add(Plan plan)
-        {
-          _dbContext.Plans.Add(plan);
-            return _dbContext.SaveChanges();
-        }
-
-        public int Delete(Plan plan)
-        {
-           var plane= _dbContext.Plans.Find(plan);
-            if (plane is null)
-                return 0;
-            _dbContext.Plans.Remove(plan);
-            return _dbContext.SaveChanges();
-        }
 
         public IEnumerable<Plan> GetAll()
         {
-         return  _dbContext.Plans.ToList();
+           return _dbContext.Plans.ToList();
         }
 
         public Plan? GetById(int id)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entities
 {
-    public class Category:BasaEntity
+    public class Category:BaseEntity
     {
         public string CategoryName { get; set; } = null!;
         #region Relationships
