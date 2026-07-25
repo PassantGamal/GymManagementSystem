@@ -17,12 +17,14 @@ namespace GymManagementBLL.Services.Classes
         private readonly IGenericRepository<Membership> _membershipRepository;
         private readonly IGenericRepository<Plan> _planRepository;
         private readonly IGenericRepository<HealthRecord> _healthRecordRepository;
-        public MemberService(IGenericRepository<Member> memberRepository,IGenericRepository<Membership> membershipRepository,IGenericRepository<Plan>planRepository,IGenericRepository<HealthRecord> healthRecordRepository)
+        public readonly IGenericRepository<MemberSession> _memberSessionRepository;
+        public MemberService(IGenericRepository<Member> memberRepository,IGenericRepository<Membership> membershipRepository,IGenericRepository<Plan>planRepository,IGenericRepository<HealthRecord> healthRecordRepository, IGenericRepository<MemberSession> memberSessionRepository)
         {
             _memberRepository = memberRepository;
             _membershipRepository = membershipRepository;
            _planRepository = planRepository;
             _healthRecordRepository = healthRecordRepository;
+            _memberSessionRepository = memberSessionRepository;
         }
 
         public bool CreateMember(CreateMemberViewModel createdmember)
@@ -140,6 +142,27 @@ namespace GymManagementBLL.Services.Classes
                 BuildingNumber = member.Address.BuildingNumber
             };
         }
+        public bool RemoveMember(int memberId)
+        {
+            var Member = _memberRepository.GetById(memberId);
+            if(Member is null) return false;
+            var HasActiveMemberSession= _memberSessionRepository
+                .GetAll(x=>x.MemberId == memberId && x.Session.StartDate>DateTime.Now).Any();
+            if (HasActiveMemberSession) return false;
+            var MemberShips=_membershipRepository.GetAll(x=>x.Id == memberId);
+            try
+            {
+                if(MemberShips.Any( ))
+                {
+                    foreach (var membership in MemberShips)
+                    {
+                        _membershipRepository.Delete(membership);
+                    }
+                }
+               return _memberRepository.Delete(Member) > 0;
+            }
+            catch { return false; }
+        }
 
         public bool UpdateMemberDetails(int Id, MemberToUpdateViewModel UpdatedMember)
         {
@@ -172,6 +195,7 @@ namespace GymManagementBLL.Services.Classes
         {
             return _memberRepository.GetAll(x => x.Phone == phone).Any();
         }
+
         #endregion
     }
 }
