@@ -17,17 +17,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         {
          _dbContext = dbContext;   
         }
-        public int Add(TEntity entity)
-        {
-            _dbContext.Set<TEntity>().Add(entity);
-            return _dbContext.SaveChanges();
-        }
+        public void Add(TEntity entity)=>_dbContext.Set<TEntity>().Add(entity);
+       
 
-        public int Delete(TEntity entity)
-        {
-           _dbContext.Set<TEntity>().Remove(entity);
-            return _dbContext.SaveChanges();
-        }
+        public void Delete(TEntity entity)=> _dbContext.Set<TEntity>().Remove(entity);
+           
 
        
 
@@ -44,11 +38,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             return _dbContext.Set<TEntity>().Find(id);
         }
 
-        public int Update(TEntity entity)
-        {
-            _dbContext.Set<TEntity>().Update(entity);
-            return _dbContext.SaveChanges();
-            
-        }
+        public void Update(TEntity entity)=>_dbContext.Set<TEntity>().Update(entity);
+           
     }
 }
