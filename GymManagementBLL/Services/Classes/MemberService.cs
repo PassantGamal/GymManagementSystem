@@ -1,8 +1,8 @@
 ﻿using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels;
+using GymManagementBLL.ViewModels.MemberViewModels;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
-using GymManagementPL.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

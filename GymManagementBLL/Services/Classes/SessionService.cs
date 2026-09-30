@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using GymManagementBLL.Services.Interfaces;
-using GymManagementBLL.ViewModels;
+using GymManagementBLL.ViewModels.SessionViewModels;
 using GymManagementDAL.Data.Contexts;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Classes;
@@ -55,5 +55,45 @@ namespace GymManagementBLL.Services.Classes
             MappedSession.AvailableSlots = MappedSession.Capacity - _unitOfWork.SessionRepository.GetCountOfBookedSlots(MappedSession.Id);
             return MappedSession;
         }
+
+        public bool CreateSession(CreateSessionViewModel CreatedSession)
+        {
+            try {
+                // Check If Trainer Exists
+                if (!IsTrainerExists(CreatedSession.TrainerId)) return false;
+                // Check If Category Exists
+                if(!IsCategoryExists(CreatedSession.CategoryId)) return false;
+                //Check If StartDate is before EndDate
+                if(!IsDateTimeValid(CreatedSession.StartDate,CreatedSession.EndDate)) return false;
+                //Check Capacity is limited to 1-25
+                if(CreatedSession.Capacity>25 || CreatedSession.Capacity<1) return false;
+
+                var SessionEntity = _mapper.Map<Session>(CreatedSession);
+                _unitOfWork.GetRepository<Session>().Add(SessionEntity);
+                return _unitOfWork.SaveChanges() > 0;
+            }
+            catch (Exception ex) {
+                Console.WriteLine($"Created Session Failed : {ex}");
+                return false;
+            }
+        }
+
+        #region Helper Methods
+        // Check If Trainer Exists
+        private bool IsTrainerExists(int TrainerId)
+        {
+            return _unitOfWork.GetRepository<Session>().GetById(TrainerId) is not null;
+        }
+        // Check If Category Exists
+        private bool IsCategoryExists(int CategoryId)
+        {
+            return _unitOfWork.GetRepository<Category>().GetById(CategoryId) is not null;
+        }
+        //Check If StartDate is before EndDate
+        private bool IsDateTimeValid(DateTime StartDate, DateTime EndDate)
+        {
+            return StartDate < EndDate;
+        }
+        #endregion
     }
 }
