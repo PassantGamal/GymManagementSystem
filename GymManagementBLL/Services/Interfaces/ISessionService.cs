@@ -1,4 +1,4 @@
-﻿using GymManagementBLL.ViewModels;
+﻿using GymManagementBLL.ViewModels.SessionViewModels;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Classes;
 using GymManagementDAL.Repositories.Interfaces;
@@ -14,5 +14,6 @@ namespace GymManagementBLL.Services.Interfaces
     {
         IEnumerable<SessionViewModel> GetAllSessions();
         SessionViewModel? GetSessionById(int sessionId);
+        bool CreateSession(CreateSessionViewModel createdSession);
     }
 }

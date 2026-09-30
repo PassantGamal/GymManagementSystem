@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GymManagementBLL.ViewModels
+namespace GymManagementBLL.ViewModels.PlanViewModels
 {
     public class UpdatePlanViewModel
     {

@@ -1,4 +1,4 @@
-﻿using GymManagementBLL.ViewModels;
+﻿using GymManagementBLL.ViewModels.PlanViewModels;
 using GymManagementDAL.Entities;
 using System;
 using System.Collections.Generic;
