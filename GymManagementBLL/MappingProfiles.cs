@@ -17,7 +17,8 @@ namespace GymManagementBLL
                 .ForMember(dest => dest.CategoryName, options => options.MapFrom(src => src.SessionCategory.CategoryName))
                 .ForMember(dest => dest.TrainerName, options => options.MapFrom(src => src.TrainerSessions.Name))
                 .ForMember(dest => dest.AvailableSlots, options => options.Ignore());
-            CreateMap<SessionViewModel, Session>();    
+            CreateMap<SessionViewModel, Session>();
+            CreateMap<UpdateSessionViewModel,Session>().ReverseMap();
         }
     }
 }
