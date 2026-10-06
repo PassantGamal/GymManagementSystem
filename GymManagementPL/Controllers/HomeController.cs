@@ -1,32 +1,46 @@
-using System.Diagnostics;
-using GymManagementPL.Models;
+﻿using GymManagementDAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementPL.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        public ViewResult Index()
         {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
-        {
+            //var Result = new ViewResult();
+            //return Result;
+            //OR
             return View();
         }
-
-        public IActionResult Privacy()
+        public JsonResult Trainer()
         {
-            return View();
+            var Trainers = new List<Trainer>()
+            {
+                new Trainer(){Name="Mohammed" ,Phone="01265478592"}
+                ,
+                new Trainer(){Name="Amr" ,Phone="01523654785"}
+            };
+            return Json(Trainers);
         }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public RedirectResult Redirect()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return Redirect("https://google.com");
+        }
+        public ContentResult Content()
+        {
+            //return Content("Hello From Gym Management System");
+            return Content("<h1>Hello From Gym Management System</h1>","text/html");
+
+        }
+        public FileResult DownloadFile()
+        {
+            var FilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "css", "site.css");
+            var FileBytes=System.IO.File.ReadAllBytes(FilePath);
+            return File(FileBytes, "text/css", "DownloadableSites.css");
+        }
+        public EmptyResult EmptyAction()
+        {
+            return new EmptyResult();
         }
     }
 }
