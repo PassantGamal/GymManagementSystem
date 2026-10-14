@@ -1,4 +1,5 @@
-﻿using GymManagementBLL.Services.Interfaces;
+﻿using AutoMapper;
+using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.PlanViewModels;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Repositories.Interfaces;
@@ -13,26 +14,29 @@ namespace GymManagementBLL.Services.Classes
     public class PlanService : IPlanService
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        public PlanService(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public PlanService(IUnitOfWork unitOfWork,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public IEnumerable<PlanViewModel> GetAllPlans()
         {
             var Plans=_unitOfWork.GetRepository<Plan>().GetAll();
             if (Plans is null || !Plans.Any()) return [];
-            return Plans.Select(p => new PlanViewModel()
-            {
-                Id= p.Id,
-                Name=p.Name,
-                Description=p.Description,
-                DurationDays=p.DurationDays,
-                IsActive=p.IsActive,
-                Price=p.Price,
-            }
+            //return Plans.Select(p => new PlanViewModel()
+            //{
+            //    Id= p.Id,
+            //    Name=p.Name,
+            //    Description=p.Description,
+            //    DurationDays=p.DurationDays,
+            //    IsActive=p.IsActive,
+            //    Price=p.Price,
+            //}
+              //);
+            return _mapper.Map<IEnumerable<PlanViewModel>>(Plans);
 
-            );
+          
 
         }
 
@@ -40,35 +44,38 @@ namespace GymManagementBLL.Services.Classes
         {
             var Plan = _unitOfWork.GetRepository<Plan>().GetById(PlanId);
             if (Plan is null) return null;
-            return new PlanViewModel()
-            {
-                Id = Plan.Id,
-                Name = Plan.Name,
-                Description = Plan.Description,
-                DurationDays = Plan.DurationDays,
-                IsActive = Plan.IsActive,
-                Price = Plan.Price,
-            };
+            //return new PlanViewModel()
+            //{
+            //    Id = Plan.Id,
+            //    Name = Plan.Name,
+            //    Description = Plan.Description,
+            //    DurationDays = Plan.DurationDays,
+            //    IsActive = Plan.IsActive,
+            //    Price = Plan.Price,
+            //};
+            return _mapper.Map<PlanViewModel>(Plan);
         }
 
         public UpdatePlanViewModel? GetPlanToUpdate(int PlanId)
         {
             var Plan = _unitOfWork.GetRepository<Plan>().GetById(PlanId);
             if (Plan is null || Plan.IsActive == false || HasActiveMemberShip(PlanId)) return null;
-            return new UpdatePlanViewModel()
-            {
-                Description = Plan.Description,
-                DurationDays = Plan.DurationDays,
-                planName = Plan.Name,
-                Price = Plan.Price
-            };
+            //return new UpdatePlanViewModel()
+            //{
+            //    Description = Plan.Description,
+            //    DurationDays = Plan.DurationDays,
+            //    planName = Plan.Name,
+            //    Price = Plan.Price
+            //};
+            return _mapper.Map<UpdatePlanViewModel>(Plan);
         }
-        public bool UpdatePlan(int PlanId, PlanViewModel updatedPlan)
+        public bool UpdatePlan(int PlanId, UpdatePlanViewModel updatedPlan)
         {
             var Plan = _unitOfWork.GetRepository<Plan>().GetById(PlanId);
             if (Plan is null || HasActiveMemberShip(PlanId)) return false;
-            (Plan.Description, Plan.Price, Plan.DurationDays, Plan.UpdatedAt) =
-                (updatedPlan.Description,updatedPlan.Price,updatedPlan.DurationDays,DateTime.Now);
+            //(Plan.Description, Plan.Price, Plan.DurationDays, Plan.UpdatedAt) =
+            //    (updatedPlan.Description,updatedPlan.Price,updatedPlan.DurationDays,DateTime.Now);
+            _mapper.Map( updatedPlan, Plan);
             _unitOfWork.GetRepository<Plan>().Update(Plan);
             return _unitOfWork.SaveChanges() > 0;
         }
