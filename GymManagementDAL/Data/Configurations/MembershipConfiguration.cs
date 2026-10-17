@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Data.Configurations
 {
-    internal class MembershipConfiguration : IEntityTypeConfiguration<Membership>
+    public class MembershipConfiguration : IEntityTypeConfiguration<Membership>
     {
         public void Configure(EntityTypeBuilder<Membership> builder)
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Data.Configurations
 {
-    internal class HealthRecordConfiguration : IEntityTypeConfiguration<HealthRecord>
+    public class HealthRecordConfiguration : IEntityTypeConfiguration<HealthRecord>
     {
         public void Configure(EntityTypeBuilder<HealthRecord> builder)
         {
