@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Data.Configurations
 {
-    internal class MemberSessionConfiguration : IEntityTypeConfiguration<MemberSession>
+    public class MemberSessionConfiguration : IEntityTypeConfiguration<MemberSession>
     {
         public void Configure(EntityTypeBuilder<MemberSession> builder)
         {
