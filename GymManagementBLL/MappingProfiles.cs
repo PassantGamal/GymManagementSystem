@@ -44,10 +44,13 @@ namespace GymManagementBLL
             //        ));
             //OR
             CreateMap<CreateMemberViewModel, Member>()
-                .ForMember(dest => dest.Address, options =>
-                options.MapFrom(src => src))
-            .ForMember(dest => dest.HealthRecord, options => options.
-            MapFrom(src => src.HealthRecordViewModel));
+     .ForMember(dest => dest.DateOfBirth,
+         options => options.MapFrom(src =>
+             src.DateOfBirth.ToDateTime(TimeOnly.MinValue)))
+     .ForMember(dest => dest.Address,
+         options => options.MapFrom(src => src))
+     .ForMember(dest => dest.HealthRecord,
+         options => options.MapFrom(src => src.HealthRecordViewModel));
             CreateMap<HealthRecordViewModel, HealthRecord>().ReverseMap();
             CreateMap<CreateMemberViewModel, Address>()
                 .ForMember(dest => dest.BuildingNumber, options => options.MapFrom(src => src.BuildingNumber))
