@@ -64,9 +64,9 @@ namespace GymManagementBLL.Services.Classes
                  _unitOfWork.GetRepository<Member>().Add(mappedMember);
                 return _unitOfWork.SaveChanges() > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return false;
+                throw;
             }
         }
 
