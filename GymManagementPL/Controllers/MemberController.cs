@@ -22,11 +22,11 @@ namespace GymManagementPL.Controllers
             if (id <= 0)
             {
                 TempData["ErorrMessage"] = "Id of member can not be negative number or 0 ";
-                return RedirectToAction(nameof(Index)); 
+                return RedirectToAction(nameof(Index));
             }
 
             var member = _memberService.GetMemberDetails(id);
-            if(member is null)
+            if (member is null)
             {
                 TempData["ErorrMessage"] = "Member Not Found";
                 return RedirectToAction(nameof(Index));
@@ -40,8 +40,8 @@ namespace GymManagementPL.Controllers
                 TempData["ErorrMessage"] = "Id of MemberHealthRecord can not be negative number or 0 ";
                 return RedirectToAction(nameof(Index));
             }
-            var MemberHealthRecord=_memberService.GetMemberHealthRecordDetails(id);
-            if(MemberHealthRecord is null)
+            var MemberHealthRecord = _memberService.GetMemberHealthRecordDetails(id);
+            if (MemberHealthRecord is null)
             {
                 TempData["ErorrMessage"] = "Member Not Found";
                 return RedirectToAction(nameof(Index));
@@ -58,10 +58,10 @@ namespace GymManagementPL.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("DataInvalid", "Chack Data And Missing Fields");
-                return View(nameof(Create),createdMember);
+                return View(nameof(Create), createdMember);
             }
             bool Result = _memberService.CreateMember(createdMember);
-            if (Result) 
+            if (Result)
             {
                 TempData["SuccessMessage"] = "Member Created Successfully";
             }
@@ -71,6 +71,37 @@ namespace GymManagementPL.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        public ActionResult MemberEdit(int Id)
+        {
+            if (Id <= 0)
+            {
+                TempData["ErorrMessage"] = "Id of MemberHealthRecord can not be negative number or 0 ";
+                return RedirectToAction(nameof(Index));
+            }
+            var Member = _memberService.GetMemberToUpdate(Id);
+            if (Member is null)
+            {
+                TempData["ErorrMessage"] = "Member Not Found ";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(Member);
+        }
+        [HttpPost]
+        public ActionResult MemberEdit([FromRoute]int Id,MemberToUpdateViewModel memberToEdit)
+        {
+            if(!ModelState.IsValid)
+            return View(memberToEdit);
 
+            var Result = _memberService.UpdateMemberDetails(Id, memberToEdit);
+            if(Result)
+            {
+                TempData["SuccessMessage"] = "Member Updated Successfully";
+            }
+            else
+            {
+                TempData["ErorrMessage"] = "Meember Failed To Update";
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

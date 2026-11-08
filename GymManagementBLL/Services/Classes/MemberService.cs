@@ -183,7 +183,9 @@ namespace GymManagementBLL.Services.Classes
             var MemberRepo = _unitOfWork.GetRepository<Member>();
             try
             {
-                if (IsEmailExist(UpdatedMember.Email) || IsPhoneExist(UpdatedMember.Phone)) return false;
+                var emailExists=_unitOfWork.GetRepository<Member>().GetAll(X=>X.Email== UpdatedMember.Email && X.Id!=Id);
+                var phoneExists = _unitOfWork.GetRepository<Member>().GetAll(X => X.Phone == UpdatedMember.Phone && X.Id != Id);
+                if (emailExists.Any() || phoneExists.Any()) return false;
                 var Member = MemberRepo.GetById(Id);
                 if (Member is null) return false;
                 //Member.Phone = UpdatedMember.Phone;
