@@ -110,15 +110,15 @@ namespace GymManagementBLL
                 .ForMember(dest => dest.BuildingNumber, options => options.
                 MapFrom(src => src.Address.BuildingNumber));
 
-            CreateMap<UpdateTrainerViewModel, Trainer>()
-                .ForMember(dest => dest.Name, options => options.Ignore())
-                .AfterMap((src, dest) =>
-                {
-                    dest.Address.BuildingNumber= src.BuildingNumber;
-                    dest.Address.City= src.City;
-                    dest.Address.Street= src.Street;
-                    dest.UpdatedAt = DateTime.Now;
-                });
+            CreateMap<TrainerToUpdateViewModel, Trainer>()
+    .ForMember(dest => dest.Name, options => options.Ignore())
+    .AfterMap((src, dest) =>
+    {
+        dest.Address.BuildingNumber = src.BuildingNumber;
+        dest.Address.City = src.City;
+        dest.Address.Street = src.Street;
+        dest.UpdatedAt = DateTime.Now;
+    });
         }
         private void MapPlan()
         {

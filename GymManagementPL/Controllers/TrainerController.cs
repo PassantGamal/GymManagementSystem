@@ -55,5 +55,40 @@ namespace GymManagementPL.Controllers
                 return View(trainer);
             
         }
+        public ActionResult TrainerEdit(int id)
+        {
+            if(id <= 0)
+            {
+                TempData["ErorrMessage"] = "Id of trainer can not be negative number or 0 ";
+                return RedirectToAction(nameof(Index));
+            }
+            var trainer=_trainerService.GetTrainerToUpdate(id);
+            if (trainer is null) {
+                TempData["ErorrMessage"] = "Trainer Not Found";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(trainer);
+            
+        }
+        [HttpPost]
+        public ActionResult TrainerEdit([FromRoute] int id,TrainerToUpdateViewModel trainerToUpdate)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("InvalidData", "Chack Data And Missing Fields");
+                return View(trainerToUpdate);
+            }
+               
+            var result = _trainerService.UpdateTrainer(id, trainerToUpdate);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Trainer Updated Successfully";
+            }
+            else
+            {
+                TempData["ErorrMessage"] = "Trainer Failed To Update";
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
