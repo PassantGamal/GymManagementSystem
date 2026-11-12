@@ -1,4 +1,5 @@
-﻿using GymManagementBLL.Services.Interfaces;
+﻿using GymManagementBLL.Services.Classes;
+using GymManagementBLL.Services.Interfaces;
 using GymManagementBLL.ViewModels.TrainerViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -90,5 +91,32 @@ namespace GymManagementPL.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        public ActionResult Delete(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErorrMessage"] = "Id of trainer can not be negative number or 0 ";
+                return RedirectToAction(nameof(Index));
+            }
+            var trainer = _trainerService.GetTrainerById(id);
+            if(trainer is null)
+            {
+                TempData["ErorrMessage"] = "Trainer Not Found";
+            }
+            ViewBag.TrainerId = id;
+            ViewBag.TrainerName = trainer?.Name;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DeleteConfirmed([FromForm] int id)
+        {
+            var Result = _trainerService.RemoveTrainer(id);
+            if (Result)
+                TempData["SuccessMessage"] = "Trainer Deleted Successfully";
+            else
+                TempData["ErorrMessage"] = "Trainer Failed To Delete";
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }
