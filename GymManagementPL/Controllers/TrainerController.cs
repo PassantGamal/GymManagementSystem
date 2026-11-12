@@ -1,20 +1,43 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GymManagementBLL.Services.Interfaces;
+using GymManagementBLL.ViewModels.TrainerViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GymManagementPL.Controllers
 {
     public class TrainerController : Controller
     {
-        public IActionResult Index()
+        private readonly ITrainerService _trainerService;
+        public TrainerController(ITrainerService trainerService) 
+        {
+            _trainerService = trainerService;
+        }
+        public ActionResult Index()
+        {
+            var trainers = _trainerService.GetAllTrainers();
+            return View(trainers);
+        }
+        public ActionResult Create()
         {
             return View();
         }
-        public ActionResult GetTrainers()
+        [HttpPost]
+        public ActionResult CreateTrainer(CreateTrainerViewModel createdTrainer)
         {
-            return Content("Hello GetTrainers...");
-        }
-        public ActionResult CreateTrainer()
-        {
-            return View();
+            if(!ModelState.IsValid)
+            {
+                ModelState.AddModelError("InvalidData", "Chack Data And Missing Fields");
+                return View(nameof(Create), createdTrainer);
+            }
+            var Result = _trainerService.CreateTrainer(createdTrainer);
+            if (Result)
+            {
+                TempData["SuccessMessage"] = "Trainer Created Successfully";
+            }
+            else
+            {
+                TempData["ErorrMessage"] = "Meember Failed To Create , Check Phone And Email";
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }
