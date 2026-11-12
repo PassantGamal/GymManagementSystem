@@ -39,5 +39,21 @@ namespace GymManagementPL.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        public ActionResult TrainerDetails(int id)
+        {
+            if (id <= 0)
+            {
+                TempData["ErorrMessage"] = "Id of trainer can not be negative number or 0 ";
+                return RedirectToAction(nameof(Index));
+            }
+            var trainer=_trainerService.GetTrainerById(id);
+            if(trainer is null)
+            {
+                TempData["ErorrMessage"] = "Trainer Not Found";
+                return RedirectToAction(nameof(Index));
+            }
+                return View(trainer);
+            
+        }
     }
 }
