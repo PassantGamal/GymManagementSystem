@@ -94,11 +94,19 @@ namespace GymManagementBLL.Services.Classes
             //};
             return _mapper.Map<TrainerToUpdateViewModel>(Trainer);
         }
-        public bool UpdateTrainer(int trainerId, UpdateTrainerViewModel updatedTrainer)
+        public bool UpdateTrainer(int trainerId, TrainerToUpdateViewModel updatedTrainer)
         {
             var repo = _unitOfWork.GetRepository<Trainer>();
-            var TrainerToUpdate = repo.GetById(trainerId);
-            if(TrainerToUpdate is null || IsEmailExist(updatedTrainer.Email) || IsPhoneExist(updatedTrainer.Phone)) return false;
+            try
+            {
+                var emailExists = repo.GetAll(X => X.Email == updatedTrainer.Email && X.Id != trainerId);
+            var phoneExists = repo.GetAll(X => X.Phone == updatedTrainer.Phone && X.Id != trainerId);
+            if (emailExists.Any() || phoneExists.Any()) return false;
+            var trainerToUpdate = repo.GetById(trainerId);
+            if (trainerToUpdate is null) return false;
+
+            //if (updatedTrainer.Email != trainerToUpdate.Email && IsEmailExist(updatedTrainer.Email)) return false;
+            //if (updatedTrainer.Phone != trainerToUpdate.Phone && IsPhoneExist(updatedTrainer.Phone)) return false;
             //TrainerToUpdate.Email = updatedTrainer.Email;
             //TrainerToUpdate.Phone = updatedTrainer.Phone;
             //TrainerToUpdate.Address.BuildingNumber = updatedTrainer.BuildingNumber;
@@ -106,10 +114,14 @@ namespace GymManagementBLL.Services.Classes
             //TrainerToUpdate.Address.City= updatedTrainer.City;
             //TrainerToUpdate.Specialty = updatedTrainer.Specialty;
             //TrainerToUpdate.UpdatedAt=DateTime.Now;
-            _mapper.Map(updatedTrainer,TrainerToUpdate);
-            repo.Update(TrainerToUpdate);
-            return _unitOfWork.SaveChanges()>0;
-
+            _mapper.Map(updatedTrainer, trainerToUpdate);
+            repo.Update(trainerToUpdate);
+            return _unitOfWork.SaveChanges() > 0;
+        }
+    catch
+    {
+        return false;
+    }
         }
         public bool RemoveTrainer(int trainerId)
         {
