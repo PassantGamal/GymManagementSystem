@@ -31,6 +31,7 @@ namespace GymManagementPL
             builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
             builder.Services.AddScoped<IMemberService, MemberService>();
             builder.Services.AddScoped<ITrainerService, TrainerService>();
+            builder.Services.AddScoped<IPlanService, PlanService>();
             builder.Services.AddAutoMapper(x => x.AddProfile(new MappingProfiles()));
 
             var app = builder.Build();
