@@ -67,5 +67,19 @@ namespace GymManagementPL.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public ActionResult Activate(int id) 
+        {
+           var result=_planService.ToggleStatus(id);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Plan Status Changed";
+            }
+            else
+            {
+                TempData["ErorrMessage"] = "Faild To Changr Plan Status";
+            }
+          return RedirectToAction(nameof(Index));
+        }
     }
 }
